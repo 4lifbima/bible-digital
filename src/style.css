@@ -1,0 +1,214 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-surface text-text-primary transition-colors duration-300;
+    overscroll-behavior: none;
+  }
+
+  .dark body {
+    @apply bg-dark-surface text-dark-text;
+  }
+
+  /* Prevent text selection on mobile for buttons */
+  button,
+  a {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+@layer components {
+
+  /* Android-style Card */
+  .card {
+    @apply bg-white rounded-android-lg shadow-elevation-2 p-4 transition-all duration-200 ease-android;
+  }
+
+  .dark .card {
+    @apply bg-dark-surface-secondary;
+  }
+
+  .card:active {
+    @apply shadow-elevation-1 scale-[0.99];
+  }
+
+  /* Primary Button */
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-primary-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-elevation-2 transition-all duration-200 ease-android active:shadow-elevation-1 active:scale-[0.98] hover:shadow-elevation-3 focus:outline-none focus:ring-2 focus:ring-primary-300;
+  }
+
+  /* Ghost Button */
+  .btn-ghost {
+    @apply text-primary font-medium px-4 py-2 rounded-android transition-all duration-200 ease-android hover:bg-primary/10 active:bg-primary/20;
+  }
+
+  /* Icon Button */
+  .btn-icon {
+    @apply p-3 rounded-full transition-all duration-200 ease-android hover:bg-gray-100 active:bg-gray-200 active:scale-95;
+  }
+
+  .dark .btn-icon {
+    @apply hover:bg-dark-surface-tertiary active:bg-dark-surface-tertiary;
+  }
+
+  /* Input Field Android Style */
+  .input-android {
+    @apply w-full px-4 py-3.5 bg-surface-secondary rounded-xl border-0 text-text-primary placeholder:text-text-disabled focus:outline-none focus:ring-2 focus:ring-primary/30 focus:bg-white transition-all duration-200 ease-android shadow-sm;
+  }
+
+  .dark .input-android {
+    @apply bg-dark-surface-secondary text-dark-text placeholder:text-dark-text-secondary focus:bg-dark-surface-tertiary;
+  }
+
+  /* Toggle Switch Android Style */
+  .toggle-track {
+    @apply relative w-14 h-8 bg-gray-300 rounded-full transition-colors duration-300 ease-android cursor-pointer;
+  }
+
+  .toggle-track.active {
+    @apply bg-primary;
+  }
+
+  .toggle-thumb {
+    @apply absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-elevation-2 transition-transform duration-300 ease-android;
+  }
+
+  .toggle-track.active .toggle-thumb {
+    @apply translate-x-6;
+  }
+
+  /* Safe area for bottom navigation */
+  .safe-bottom {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+
+  /* Text selection color */
+  ::selection {
+    @apply bg-primary/30 text-text-primary;
+  }
+
+  /* Smooth page transitions */
+  .page-enter-active,
+  .page-leave-active {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .page-enter-from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .page-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Shimmer effect for skeleton */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(0, 0, 0, 0) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  /* Pulse animation for skeleton */
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.5;
+    }
+  }
+}
