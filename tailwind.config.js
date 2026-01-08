@@ -40,7 +40,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'Roboto', 'system-ui', 'sans-serif'],
+        // Font Sans Jakarta CDN
+        sans: ['Plus Jakarta Sans', 'sans-serif'],
       },
       boxShadow: {
         'elevation-1': '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
