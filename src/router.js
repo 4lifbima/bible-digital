@@ -30,6 +30,16 @@ const routes = [
         path: '/pengaturan',
         name: 'Settings',
         component: () => import('./views/SettingsView.vue')
+    },
+    {
+        path: '/berita',
+        name: 'Articles',
+        component: () => import('./views/ArticlesView.vue')
+    },
+    {
+        path: '/berita/:slug',
+        name: 'ArticleDetail',
+        component: () => import('./views/ArticleDetailView.vue')
     }
 ]
 

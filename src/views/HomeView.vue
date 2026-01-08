@@ -190,7 +190,7 @@
     </section>
 
     <!-- Continue Reading -->
-    <section class="px-4">
+    <section class="px-4 mb-6">
       <div class="flex items-center justify-between mb-3">
         <h2 class="text-lg font-semibold text-text-primary dark:text-dark-text">Lanjutkan Membaca</h2>
       </div>
@@ -229,6 +229,120 @@
       </template>
     </section>
 
+    <!-- News/Berita Section -->
+    <section class="px-4">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-text-primary dark:text-dark-text">Berita Terbaru</h2>
+        <button 
+          @click="$router.push('/berita')"
+          class="text-primary text-sm font-medium hover:text-primary-600 transition-colors flex items-center gap-1"
+        >
+          Lihat Semua
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+      
+      <template v-if="isLoadingPage">
+        <SkeletonLoader type="hero" />
+        <div class="space-y-3 mt-4">
+          <SkeletonLoader type="card" v-for="i in 3" :key="i" />
+        </div>
+      </template>
+      
+      <template v-else>
+        <!-- Headline News -->
+        <div 
+          v-if="headlineArticle"
+          @click="$router.push(`/berita/${headlineArticle.slug}`)"
+          class="relative overflow-hidden rounded-android-xl bg-gradient-to-br from-primary via-primary-600 to-primary-800 p-5 shadow-elevation-3 cursor-pointer group mb-4 animate-fade-in"
+          style="animation-delay: 0.4s"
+        >
+          <!-- Decorative Elements -->
+          <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-xl"></div>
+          <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+          
+          <div class="relative z-10">
+            <!-- Badge -->
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-3 py-1 text-xs font-semibold bg-white/20 text-white rounded-full backdrop-blur-sm">
+                Headline
+              </span>
+              <span class="px-3 py-1 text-xs font-medium bg-white/10 text-white/90 rounded-full backdrop-blur-sm">
+                {{ headlineArticle.category }}
+              </span>
+            </div>
+            
+            <!-- Title -->
+            <h3 class="text-white text-lg font-bold leading-tight mb-2 group-hover:text-white/90 transition-colors line-clamp-2">
+              {{ headlineArticle.title }}
+            </h3>
+            
+            <!-- Excerpt -->
+            <p class="text-white/80 text-sm leading-relaxed mb-4 line-clamp-2">
+              {{ headlineArticle.excerpt }}
+            </p>
+            
+            <!-- Meta -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-white/70 text-xs">
+                <span>{{ formatArticleDate(headlineArticle.date) }}</span>
+                <span>•</span>
+                <span>{{ headlineArticle.readTime }}</span>
+              </div>
+              <div class="flex items-center gap-1 text-white/90 text-sm font-medium group-hover:gap-2 transition-all">
+                <span>Baca</span>
+                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- News List -->
+        <div class="space-y-3">
+          <div 
+            v-for="(article, index) in recentArticles" 
+            :key="article.id"
+            @click="$router.push(`/berita/${article.slug}`)"
+            class="card flex items-start gap-4 cursor-pointer hover:shadow-elevation-3 transition-all duration-300 animate-fade-in group"
+            :style="{ animationDelay: `${0.45 + index * 0.05}s` }"
+          >
+            <!-- Icon -->
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+              <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              </svg>
+            </div>
+            
+            <!-- Content -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-medium text-primary">{{ article.category }}</span>
+                <span class="text-xs text-text-secondary dark:text-dark-text-secondary">•</span>
+                <span class="text-xs text-text-secondary dark:text-dark-text-secondary">{{ article.readTime }}</span>
+              </div>
+              <h3 class="font-semibold text-text-primary dark:text-dark-text line-clamp-2 group-hover:text-primary transition-colors">
+                {{ article.title }}
+              </h3>
+              <p class="text-xs text-text-secondary dark:text-dark-text-secondary mt-1">
+                {{ formatArticleDate(article.date) }}
+              </p>
+            </div>
+            
+            <!-- Arrow -->
+            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-dark-surface-tertiary group-hover:bg-primary/10 transition-colors">
+              <svg class="w-4 h-4 text-text-secondary dark:text-dark-text-secondary group-hover:text-primary transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </template>
+    </section>
+
     <!-- Toast Notification -->
     <Transition name="toast">
       <div 
@@ -250,6 +364,7 @@
 import { ref, computed, inject, onMounted } from 'vue'
 import { getDailyVerse } from '../data/bibleData.js'
 import { getRecentReflections } from '../data/reflectionData.js'
+import { getHeadlineArticle, getRecentArticles, formatDate } from '../data/articlesData.js'
 import SkeletonLoader from '../components/SkeletonLoader.vue'
 
 const fontSize = inject('fontSize', ref(2))
@@ -257,6 +372,8 @@ const favorites = inject('favorites', ref([]))
 
 const dailyVerse = getDailyVerse()
 const recentReflections = getRecentReflections(3)
+const headlineArticle = getHeadlineArticle()
+const recentArticles = getRecentArticles(4)
 
 const isLoadingPage = ref(true)
 const showToast = ref(false)
@@ -281,6 +398,10 @@ const greeting = computed(() => {
   if (hour < 18) return 'Selamat Sore'
   return 'Selamat Malam'
 })
+
+const formatArticleDate = (dateString) => {
+  return formatDate(dateString)
+}
 
 const showToastMessage = (message) => {
   toastMessage.value = message
@@ -325,5 +446,13 @@ const shareVerse = async () => {
 .toast-leave-to {
   opacity: 0;
   transform: translateY(20px);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>
